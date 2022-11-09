@@ -1,0 +1,6 @@
+node_modules
+.env
+dist
+coverage
+package-lock.json
+fly.toml
