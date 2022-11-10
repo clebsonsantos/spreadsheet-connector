@@ -19,13 +19,13 @@ export const badRequest = (error: Error): HttpResponse<any> => ({
 export const unauthorized = (): HttpResponse<any> => ({
   statusCode: 401,
   data: {
-    message: new UnauthorazedError().message
+    message: (new UnauthorazedError()).message
   }
 })
 
 export const serverError = (error: Error): HttpResponse<any> => ({
   statusCode: 500,
   data: {
-    message: new ServerError(error).message
+    message: (new ServerError(error)).message
   }
 })

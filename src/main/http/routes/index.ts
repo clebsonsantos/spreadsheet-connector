@@ -8,7 +8,8 @@ const routes = Router()
 routes.post("/spreadsheet/list", async (request: Request, response: Response) => {
   const loadService = new LoadValuesDataSheet()
   const loadDatasheetValues = new LoadValuesController(loadService)
-  await loadDatasheetValues.handle(request, response)
+  const result = await loadDatasheetValues.handle(request)
+  return response.status(result.statusCode).json(result.data)
 })
 
 export { routes }

@@ -24,6 +24,8 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "@types/cors": "^2.8.12",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "google-spreadsheet": "^3.3.0"

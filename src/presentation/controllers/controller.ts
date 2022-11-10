@@ -1,4 +1,3 @@
-import { Response } from "express"
 import { RequiredFieldError } from "../errors"
 import { badRequest, HttpResponse, serverError } from "../helpers"
 
@@ -17,19 +16,16 @@ export type HttpRequest = {
   }
 }
 export abstract class Controller {
-  public async handle (httpRequest: HttpRequest, httpResponse: Response): Promise<Response> {
-    const error = this.validate(httpRequest)
-    if (typeof error === "string") {
-      const badError = badRequest(new RequiredFieldError(error))
-      return httpResponse.json(badError.data).status(badError.statusCode)
-    }
-
+  public async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const result = await this.perform(httpRequest)
-      return httpResponse.json(result.data).status(result.statusCode)
+      const error = this.validate(httpRequest)
+      if (typeof error === "string") {
+        return badRequest(new RequiredFieldError(error))
+      }
+
+      return await this.perform(httpRequest)
     } catch (error: any) {
-      const err = serverError(error)
-      return httpResponse.json(err.data).status(err.statusCode)
+      return serverError(error)
     }
   }
 
