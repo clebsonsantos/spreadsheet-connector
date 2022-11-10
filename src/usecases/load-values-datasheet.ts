@@ -1,4 +1,4 @@
-import { LoadValue } from "../contracts/usecases/load-values"
+import { LoadValue } from "../contracts/usecases"
 import { left, right } from "../main/shared"
 
 export class LoadValuesDataSheet implements LoadValue {

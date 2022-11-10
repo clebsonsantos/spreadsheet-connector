@@ -29,7 +29,13 @@ export abstract class Controller {
     }
   }
 
-  private validate ({ body, method }: HttpRequest): string | true {
+  public validateFieldValues (httpRequest: HttpRequest): HttpResponse | undefined {
+    if (!httpRequest.body.values) return badRequest(new RequiredFieldError("values"))
+    if (!Object.values(httpRequest.body.values).length) return badRequest(new RequiredFieldError("values"))
+    return undefined
+  }
+
+  private validate ({ body }: HttpRequest): string | true {
     if (!body) return "body"
     if (!body.credentials) return "body"
     if (!body.credentials.client_email || !body.credentials.private_key) {
@@ -38,8 +44,6 @@ export abstract class Controller {
     if (!body.fields) return "fields"
     if (!body.spreadSheetId) return "spreadSheetId"
     if (!body.spreadSheetTabName) return "spreadSheetTabName"
-    // if (method !== "GET" && !body.values) return "values"
-    // if (method !== "GET" && !Object.values(body.values).length) return "values"
     return true
   }
 

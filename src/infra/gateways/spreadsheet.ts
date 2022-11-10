@@ -79,7 +79,7 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
 
     values.ID = crypto.randomUUID()
     const row = await sheetRange.value.addRow(values)
-    return right(row)
+    return right(row.ID)
   }
 
   public async deleteValues ({ id }: GoogleSpreadSheetApi.DeleteValues.Params): Promise<GoogleSpreadSheetApi.DeleteValues.Result> {
