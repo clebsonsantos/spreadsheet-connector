@@ -108,19 +108,25 @@ Tag this project with a star 🌟
 
 - `update`
 
-    ```json
-    {
-        "credentials": {
-        "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-        "client_email": "client_email@google.com"
-        },
-        "fields": ["NAME", "AGE"],
-        "spreadSheetId": "ID",
-        "spreadSheetTabName": "ANY-NAME",
-        "values": {
-            "ID": "e5205dc6-01a5-42fa-9d91-7a19d7d231fa",
-            "NAME": "any name",
-            "AGE": "16"
-        }
+```json
+{
+    "credentials": {
+    "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+    "client_email": "client_email@google.com"
+    },
+    "fields": ["NAME", "AGE"],
+    "spreadSheetId": "ID",
+    "spreadSheetTabName": "ANY-NAME",
+    "values": {
+        "ID": "e5205dc6-01a5-42fa-9d91-7a19d7d231fa",
+        "NAME": "any name",
+        "AGE": "16"
     }
+}
 ```
+
+<br/>
+
+### Note
+  - You can test how this project works at: [Spreadsheet Connect Api Demo](https://spreadsheeet-connector.fly.dev)
+  - Insert the body according to the method
