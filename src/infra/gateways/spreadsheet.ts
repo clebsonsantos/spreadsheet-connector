@@ -2,7 +2,7 @@ import { GoogleSpreadsheet, GoogleSpreadsheetRow } from "google-spreadsheet"
 import { GoogleSpreadSheetApi } from "../../contracts/gateways/google-spreadsheet"
 import crypto from "crypto"
 import { left, right } from "../../main/shared"
-import { ServerError } from "../errors/server-error"
+import { ServerError } from "../errors"
 
 type Credentials = {
   client_email: string
