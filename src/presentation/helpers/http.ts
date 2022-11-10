@@ -9,17 +9,23 @@ export const ok = <T = any> (data: T): HttpResponse<T> => ({
   data
 })
 
-export const badRequest = (error: Error): HttpResponse<Error> => ({
+export const badRequest = (error: Error): HttpResponse<any> => ({
   statusCode: 400,
-  data: error
+  data: {
+    message: error.message
+  }
 })
 
-export const unauthorized = (): HttpResponse<Error> => ({
+export const unauthorized = (): HttpResponse<any> => ({
   statusCode: 401,
-  data: new UnauthorazedError()
+  data: {
+    message: new UnauthorazedError().message
+  }
 })
 
-export const serverError = (error: Error): HttpResponse<Error> => ({
+export const serverError = (error: Error): HttpResponse<any> => ({
   statusCode: 500,
-  data: new ServerError(error)
+  data: {
+    message: new ServerError(error).message
+  }
 })

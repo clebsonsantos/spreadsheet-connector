@@ -1,7 +1,9 @@
+import { Response } from "express"
 import { RequiredFieldError } from "../errors"
 import { badRequest, HttpResponse, serverError } from "../helpers"
 
-type HttpRequest = {
+export type HttpRequest = {
+  method: string
   body: {
     values: {
       [key: string]: string
@@ -15,26 +17,33 @@ type HttpRequest = {
   }
 }
 export abstract class Controller {
-  public async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  public async handle (httpRequest: HttpRequest, httpResponse: Response): Promise<Response> {
     const error = this.validate(httpRequest)
     if (typeof error === "string") {
-      return badRequest(new RequiredFieldError(error))
+      const badError = badRequest(new RequiredFieldError(error))
+      return httpResponse.json(badError.data).status(badError.statusCode)
     }
+
     try {
-      return await this.perform(httpRequest)
+      const result = await this.perform(httpRequest)
+      return httpResponse.json(result.data).status(result.statusCode)
     } catch (error: any) {
-      return serverError(error)
+      const err = serverError(error)
+      return httpResponse.json(err.data).status(err.statusCode)
     }
   }
 
-  private validate ({ body }: HttpRequest): string | true {
+  private validate ({ body, method }: HttpRequest): string | true {
+    if (!body) return "body"
+    if (!body.credentials) return "body"
     if (!body.credentials.client_email || !body.credentials.private_key) {
       return "credentials"
     }
-    if (!Object.values(body.values).length) return "values"
-    if (!Object.values(body.fields).length) return "fiels"
-    if (!Object.values(body.spreadSheetId).length) return "spreadSheetId"
-    if (!Object.values(body.spreadSheetTabName).length) return "spreadSheetTabName"
+    if (!body.fields) return "fields"
+    if (!body.spreadSheetId) return "spreadSheetId"
+    if (!body.spreadSheetTabName) return "spreadSheetTabName"
+    // if (method !== "GET" && !body.values) return "values"
+    // if (method !== "GET" && !Object.values(body.values).length) return "values"
     return true
   }
 
