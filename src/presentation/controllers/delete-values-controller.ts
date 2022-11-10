@@ -26,6 +26,6 @@ export class DeleteValuesController extends Controller {
 
     return result.isRight()
       ? ok({ id: result.value })
-      : unauthorized()
+      : unauthorized(result.value)
   }
 }

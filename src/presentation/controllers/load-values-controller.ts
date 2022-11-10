@@ -15,6 +15,6 @@ export class LoadValuesController extends Controller {
 
     return result.isRight()
       ? ok(result.value)
-      : unauthorized()
+      : unauthorized(result.value)
   }
 }

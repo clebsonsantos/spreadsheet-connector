@@ -98,7 +98,7 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
       }
     })
 
-    if (!ok) return left(new ServerError(404, "Not found"))
+    if (!ok) return left(new ServerError(404, "No record was found with this id"))
     return right(ok)
   }
 
@@ -123,7 +123,7 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
     })
 
     if (!register) {
-      return left(new ServerError(404, "Not found"))
+      return left(new ServerError(404, "No record was found with this id"))
     }
     for (const [key, value] of Object.entries(values)) {
       if (register[key]) {
