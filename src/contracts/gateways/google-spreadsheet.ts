@@ -7,6 +7,7 @@ export interface GoogleSpreadSheetApi {
   loadValues: () => Promise<GoogleSpreadSheetApi.LoadValues.Result>
   addValues: (params: GoogleSpreadSheetApi.AddValues.Params) => Promise<GoogleSpreadSheetApi.AddValues.Result>
   deleteValues: (params: GoogleSpreadSheetApi.DeleteValues.Params) => Promise<GoogleSpreadSheetApi.DeleteValues.Result>
+  updateValues: (params: GoogleSpreadSheetApi.UpdateValues.Params) => Promise<GoogleSpreadSheetApi.UpdateValues.Result>
 }
 
 export namespace GoogleSpreadSheetApi {

@@ -102,7 +102,7 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
     return right(ok)
   }
 
-  public async updateValues ({ values }: GoogleSpreadSheetApi.AddValues.Params): Promise<any> {
+  public async updateValues ({ values }: GoogleSpreadSheetApi.UpdateValues.Params): Promise<GoogleSpreadSheetApi.UpdateValues.Result> {
     const sheetRange = await this.authentication()
 
     if (sheetRange.isLeft()) {
@@ -111,6 +111,10 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
 
     const list = await sheetRange.value.getRows()
     let register: GoogleSpreadsheetRow | undefined
+
+    if (!values.ID) {
+      return left(new ServerError(400, "ID is required"))
+    }
 
     list.forEach((item) => {
       if (item.ID === values.ID) {

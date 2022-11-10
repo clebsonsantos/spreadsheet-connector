@@ -1,10 +1,10 @@
-import { AddValues } from "../../contracts/usecases"
+import { UpdateValues } from "../../contracts/usecases"
 import { SpreadSheet } from "../../infra/gateways"
 import { HttpResponse, ok, unauthorized } from "../helpers"
 import { Controller, HttpRequest } from "./controller"
 
-export class AddValuesController extends Controller {
-  constructor (private readonly addValuessDataSheet: AddValues) {
+export class UpdateValuesController extends Controller {
+  constructor (private readonly updateValuessDataSheet: UpdateValues) {
     super()
   }
 
@@ -16,7 +16,7 @@ export class AddValuesController extends Controller {
 
     const { credentials, fields, spreadSheetId, spreadSheetTabName } = httpRequest.body
     const auth = new SpreadSheet(credentials as any, spreadSheetId, spreadSheetTabName, fields)
-    const result = await this.addValuessDataSheet.execute({ auth, data: httpRequest.body.values })
+    const result = await this.updateValuessDataSheet.execute({ auth, data: httpRequest.body.values })
 
     return result.isRight()
       ? ok({ id: result.value })
