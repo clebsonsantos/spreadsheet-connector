@@ -1,12 +1,15 @@
 import { GoogleSpreadsheet } from "google-spreadsheet"
 import { GoogleSpreadSheetApi } from "../../contracts/gateways/google-spreadsheet"
-// import crypto from "crypto"
+import crypto from "crypto"
 import { left, right } from "../../main/shared"
 import { ServerError } from "../errors/server-error"
 
 type Credentials = {
   client_email: string
   private_key: string
+}
+type ObjectData = {
+  [key: string]: string
 }
 
 export class SpreadSheet implements GoogleSpreadSheetApi {
@@ -49,21 +52,33 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
       return left(range.value)
     }
 
-    const json: any = {}
     const values = await range.value.getRows()
 
     const result: any[] = []
 
     values.forEach((item) => {
-      json.id = item.ID
-      for (const header of this.fields) {
-        if (item[header]) {
-          json[header.toLowerCase()] = item[header]
+      const json: ObjectData = {}
+      const id = !item.ID ? crypto.randomUUID() : item.ID
+      json.id = id
+      for (const field of this.fields) {
+        if (item[field]) {
+          json[field.toLowerCase()] = item[field]
         }
       }
       result.push(json)
     })
-
     return right(result)
+  }
+
+  public async addValues ({ values }: GoogleSpreadSheetApi.AddValues.Params): Promise<GoogleSpreadSheetApi.AddValues.Result> {
+    const sheetRange = await this.authentication()
+
+    if (sheetRange.isLeft()) {
+      return left(sheetRange.value)
+    }
+
+    values.ID = crypto.randomUUID()
+    const row = await sheetRange.value.addRow(values)
+    return right(row)
   }
 }

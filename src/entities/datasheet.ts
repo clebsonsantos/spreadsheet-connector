@@ -1,10 +1,11 @@
 
 type DataSheetValue = Omit<DataSheet, "getValue" | "isValid">
 
+type ObjectData = {
+  [key: string]: string
+}
 export class DataSheet {
-  public data!: {
-    [key: string]: string
-  }
+  public data!: ObjectData
 
   constructor (params: DataSheetValue) {
     Object.assign(this, params)
