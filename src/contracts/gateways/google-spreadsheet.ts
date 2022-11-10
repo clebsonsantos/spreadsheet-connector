@@ -28,4 +28,9 @@ export namespace GoogleSpreadSheetApi {
     export type Params = { id: string }
     export type Result = Either<ServerError, true>
   }
+
+  export namespace UpdateValues {
+    export type Params = { values: { [key: string]: string } }
+    export type Result = Either<ServerError, { [key: string]: string }>
+  }
 }

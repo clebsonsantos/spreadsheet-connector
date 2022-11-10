@@ -1,4 +1,4 @@
-import { GoogleSpreadsheet } from "google-spreadsheet"
+import { GoogleSpreadsheet, GoogleSpreadsheetRow } from "google-spreadsheet"
 import { GoogleSpreadSheetApi } from "../../contracts/gateways/google-spreadsheet"
 import crypto from "crypto"
 import { left, right } from "../../main/shared"
@@ -98,7 +98,37 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
       }
     })
 
-    if (!ok) return left(new ServerError(404, "Not Found"))
+    if (!ok) return left(new ServerError(404, "Not found"))
     return right(ok)
+  }
+
+  public async updateValues ({ values }: GoogleSpreadSheetApi.AddValues.Params): Promise<any> {
+    const sheetRange = await this.authentication()
+
+    if (sheetRange.isLeft()) {
+      return left(sheetRange.value)
+    }
+
+    const list = await sheetRange.value.getRows()
+    let register: GoogleSpreadsheetRow | undefined
+
+    list.forEach((item) => {
+      if (item.ID === values.ID) {
+        register = item
+      }
+    })
+
+    if (!register) {
+      return left(new ServerError(404, "Not found"))
+    }
+    for (const [key, value] of Object.entries(values)) {
+      if (register[key]) {
+        register[key] = value || register[key]
+      }
+    }
+
+    await register.save()
+
+    return right(register.ID)
   }
 }
