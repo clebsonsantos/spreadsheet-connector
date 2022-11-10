@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc & node ./dist/main/http/server.js",
+    "start": "tsc && node ./dist/main/http/server.js",
     "dev": "tsnd ./src/main/http/server.ts"
   },
   "keywords": [],

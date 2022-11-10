@@ -5,7 +5,7 @@ import { Either } from "../../main/shared"
 
 export interface GoogleSpreadSheetApi {
   authentication: () => Promise<GoogleSpreadSheetApi.Authentication.Result>
-  loadValues: (params: GoogleSpreadSheetApi.LoadValues.Params) => Promise<GoogleSpreadSheetApi.LoadValues.Result>
+  loadValues: () => Promise<GoogleSpreadSheetApi.LoadValues.Result>
 }
 
 export namespace GoogleSpreadSheetApi {
@@ -13,7 +13,6 @@ export namespace GoogleSpreadSheetApi {
     export type Result = Either<ServerError, GoogleSpreadsheetWorksheet>
   }
   export namespace LoadValues {
-    export type Params = { headers: string[] }
     export type Result = Either<ServerError | InvalidParamsError, any[]>
   }
 }

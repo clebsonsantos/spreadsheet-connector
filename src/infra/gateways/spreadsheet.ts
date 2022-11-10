@@ -2,7 +2,6 @@ import { GoogleSpreadsheet } from "google-spreadsheet"
 import { GoogleSpreadSheetApi } from "../../contracts/gateways/google-spreadsheet"
 // import crypto from "crypto"
 import { left, right } from "../../main/shared"
-import { InvalidParamsError } from "../errors/invalid-params-error"
 import { ServerError } from "../errors/server-error"
 
 type Credentials = {
@@ -14,7 +13,8 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
   constructor (
     private readonly googleCredentials: Credentials,
     private readonly spreadSheetId: string,
-    private readonly spreadSheetTabName: string
+    private readonly spreadSheetTabName: string,
+    private readonly fields: string[]
 
   ) {}
 
@@ -28,31 +28,37 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
       await doc.loadInfo()
       const sheetRange = doc.sheetsByTitle[this.spreadSheetTabName]
 
+      if (!sheetRange) {
+        const newRange = await doc.addSheet({
+          title: this.spreadSheetTabName
+        })
+        await newRange.setHeaderRow(["ID", ...this.fields])
+        return right(newRange)
+      }
+
       return right(sheetRange)
     } catch (error: any) {
       return left(new ServerError(500, error.message))
     }
   }
 
-  public async loadValues ({ headers }: GoogleSpreadSheetApi.LoadValues.Params): Promise<GoogleSpreadSheetApi.LoadValues.Result> {
+  public async loadValues (): Promise<GoogleSpreadSheetApi.LoadValues.Result> {
     const range = await this.authentication()
 
     if (range.isLeft()) {
       return left(range.value)
     }
 
-    if (!headers.length) {
-      return left(new InvalidParamsError("headers"))
-    }
     const json: any = {}
     const values = await range.value.getRows()
 
     const result: any[] = []
 
     values.forEach((item) => {
-      for (const header of headers) {
+      json.id = item.ID
+      for (const header of this.fields) {
         if (item[header]) {
-          json[header] = item[header]
+          json[header.toLowerCase()] = item[header]
         }
       }
       result.push(json)
