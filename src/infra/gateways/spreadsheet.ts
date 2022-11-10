@@ -81,4 +81,24 @@ export class SpreadSheet implements GoogleSpreadSheetApi {
     const row = await sheetRange.value.addRow(values)
     return right(row)
   }
+
+  public async deleteValues ({ id }: GoogleSpreadSheetApi.DeleteValues.Params): Promise<GoogleSpreadSheetApi.DeleteValues.Result> {
+    const sheetRange = await this.authentication()
+
+    if (sheetRange.isLeft()) {
+      return left(sheetRange.value)
+    }
+    const values = await sheetRange.value.getRows()
+
+    let ok = false
+    values.forEach((row) => {
+      if (row.ID === id) {
+        void row.delete()
+        ok = true
+      }
+    })
+
+    if (!ok) return left(new ServerError(404, "Not Found"))
+    return right(ok)
+  }
 }
