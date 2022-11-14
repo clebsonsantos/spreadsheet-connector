@@ -26,6 +26,10 @@ Tag this project with a star 🌟
     - Create a [Google project](https://console.cloud.google.com/)
     - Create a [account service for the project](https://cloud.google.com/iam/docs/service-accounts) 
     - Create and export access credentials.
+- Share the spreadsheet you want to access with the email generated on google
+  
+<img src="./shared-sheet.png"/>
+
 
 
 - Deploy for production
